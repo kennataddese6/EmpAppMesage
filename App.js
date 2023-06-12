@@ -36,7 +36,12 @@ function App() {
       phoneNumber,
       Message,
       fail => {
-        console.log('Failed with this error: ' + fail);
+        Alert.alert(
+          'Error',
+          `Something Went Wrong. Please try again!`,
+          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+          {cancelable: false},
+        );
       },
       success => {
         Alert.alert(
