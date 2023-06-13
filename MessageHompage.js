@@ -10,6 +10,8 @@ import {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GetSmsAndroid from 'react-native-get-sms-android';
+import {DataTable} from 'react-native-paper';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -24,11 +26,11 @@ import {
 } from 'react-native';
 
 const MessageHomepage = props => {
+  const [Messages, setMessages] = useState([]);
   const filter = {
     box: '',
   };
   const getMessages = async () => {
-    console.log('here is the import', GetSmsAndroid);
     GetSmsAndroid.list(
       JSON.stringify(filter),
       fail => {
@@ -36,10 +38,15 @@ const MessageHomepage = props => {
       },
       (count, smsList) => {
         console.log('Count: ', count);
-        console.log('List: ', smsList);
+        // console.log('List: ', smsList);
+        setMessages(JSON.parse(smsList));
       },
     );
   };
+
+  console.log('here are the messags', Messages);
+  console.log('number of messages', Messages.length);
+  console.log('number of messages', typeof Messages);
 
   return (
     <View
@@ -47,6 +54,14 @@ const MessageHomepage = props => {
         flex: 1,
         alignItems: 'center',
       }}>
+      {Messages
+        ? Messages.map(message => (
+            <>
+              <Text>{message.address}</Text>
+              <Text>{message.body.trim()}</Text>
+            </>
+          ))
+        : console.log('no messages')}
       <View
         style={[
           {
