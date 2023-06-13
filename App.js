@@ -17,6 +17,7 @@ import {
   View,
   Button,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -70,7 +71,9 @@ function App() {
         value={Message}
         onChangeText={input => setMessage(input)}
       />
-      <Button title="Send" onPress={sendText} />
+      <TouchableOpacity style={styles.button} onPress={sendText}>
+        <Text style={styles.buttonText}>Send</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -78,21 +81,34 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#F5FCFF',
   },
   title: {
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
   input: {
     height: 40,
+    width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
-    margin: 20,
-    padding: 10,
+    paddingHorizontal: 10,
+    marginVertical: 5,
+  },
+  button: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
