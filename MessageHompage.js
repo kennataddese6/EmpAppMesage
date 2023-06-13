@@ -54,14 +54,16 @@ const MessageHomepage = props => {
         flex: 1,
         alignItems: 'center',
       }}>
-      {Messages
-        ? Messages.map(message => (
-            <>
-              <Text>{message.address}</Text>
-              <Text>{message.body.trim()}</Text>
-            </>
-          ))
-        : console.log('no messages')}
+      <ScrollView style={{position: 'relative', top: 15}}>
+        {Messages
+          ? Messages.map(message => (
+              <>
+                <Text>{message.address}</Text>
+                <Text>{message.body.trim()}</Text>
+              </>
+            ))
+          : console.log('no messages')}
+      </ScrollView>
       <View
         style={[
           {
