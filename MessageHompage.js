@@ -70,7 +70,7 @@ const MessageHomepage = props => {
     italic: {
       fontStyle: 'italic',
       marginTop: 10,
-      fontSize: 18,
+      fontSize: 15,
     },
     bold: {
       fontStyle: 'italic',
@@ -92,6 +92,7 @@ const MessageHomepage = props => {
           left: 0,
           height: 20,
           width: '90%',
+          height: '70%',
         }}>
         {Messages
           ? Messages.map(message => (
@@ -105,8 +106,12 @@ const MessageHomepage = props => {
                     }}>
                     <Text style={styles.bold}> {message.address} </Text>
                     <Text style={styles.italic}>
-                      {message.body[0].trim().length > 40
-                        ? message.body[0].trim().slice(0, 40).concat('...')
+                      {message.body[0].trim().length > 30
+                        ? message.body[0]
+                            .trim()
+                            .replace(/[\s\n]+/g, ' ')
+                            .slice(0, 30)
+                            .concat('...')
                         : message.body[0].trim()}{' '}
                     </Text>
                   </View>
