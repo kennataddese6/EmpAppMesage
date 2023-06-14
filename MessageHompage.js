@@ -43,26 +43,25 @@ const MessageHomepage = props => {
         (count, smsList) => {
           // console.log('Count: ', count);
           // console.log('List: ', smsList);
-          setMessages(JSON.parse(smsList));
+          const AllMessages = JSON.parse(smsList);
+          const result = Object.values(
+            AllMessages.reduce((acc, item) => {
+              if (acc[item.address]) {
+                console.log('found shit');
+                acc[item.address].body.push(item.body);
+              } else {
+                acc[item.address] = {...item, body: [item.body]};
+              }
+              return acc;
+            }, {}),
+          );
+          console.log('this is the result', result);
+          setMessages(result);
         },
       );
     };
     getMessages();
   }, []);
-  useEffect(() => {
-    for (const text of Messages) {
-      if (uniqueSet.has(text.address)) {
-        duplicateItems.push(text);
-      } else {
-        uniqueSet.add(text.address);
-      }
-    }
-    console.log('this are the duplicate items', duplicateItems);
-  }, [Messages]);
-
-  /*   console.log('here are the messags', Messages);
-  console.log('number of messages', Messages.length);
-  console.log('number of messages', typeof Messages); */
 
   const styles = StyleSheet.create({
     border: {
@@ -105,7 +104,7 @@ const MessageHomepage = props => {
                       borderBottomColor: 'black',
                     }}>
                     <Text style={styles.bold}> {message.address} </Text>
-                    <Text style={styles.italic}>{message.body.trim()} </Text>
+                    <Text style={styles.italic}>{message.body[0].trim()} </Text>
                   </View>
                 </React.Fragment>
               </>
