@@ -48,22 +48,53 @@ const MessageHomepage = props => {
   console.log('number of messages', Messages.length);
   console.log('number of messages', typeof Messages);
 
+  const styles = StyleSheet.create({
+    border: {
+      textDecorationLine: 'underline',
+    },
+    italic: {
+      fontStyle: 'italic',
+      marginTop: 10,
+      fontSize: 18,
+    },
+    bold: {
+      fontStyle: 'italic',
+      fontWeight: 'bold',
+      marginTop: 10,
+      fontSize: 20,
+    },
+  });
   return (
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-end',
       }}>
-      <ScrollView style={{position: 'relative', top: 15}}>
+      <ScrollView
+        style={{
+          position: 'relative',
+          top: 10,
+          left: 0,
+          height: 20,
+          width: '90%',
+        }}>
         {Messages
           ? Messages.map(message => (
               <>
-                <Text>{message.address}</Text>
-                <Text>{message.body.trim()}</Text>
+                <View
+                  style={{
+                    width: '100%',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'black',
+                  }}>
+                  <Text style={styles.bold}> {message.address} </Text>
+                  <Text style={styles.italic}>{message.body.trim()} </Text>
+                </View>
               </>
             ))
           : console.log('no messages')}
       </ScrollView>
+      <ScrollView style={{position: 'relative', top: 15}}></ScrollView>
       <View
         style={[
           {
