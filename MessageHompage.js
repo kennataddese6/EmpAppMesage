@@ -30,19 +30,23 @@ const MessageHomepage = props => {
   const filter = {
     box: '',
   };
-  const getMessages = async () => {
-    GetSmsAndroid.list(
-      JSON.stringify(filter),
-      fail => {
-        console.log('Failed with this error: ' + fail);
-      },
-      (count, smsList) => {
-        console.log('Count: ', count);
-        // console.log('List: ', smsList);
-        setMessages(JSON.parse(smsList));
-      },
-    );
-  };
+
+  useEffect(() => {
+    const getMessages = async () => {
+      GetSmsAndroid.list(
+        JSON.stringify(filter),
+        fail => {
+          console.log('Failed with this error: ' + fail);
+        },
+        (count, smsList) => {
+          console.log('Count: ', count);
+          // console.log('List: ', smsList);
+          setMessages(JSON.parse(smsList));
+        },
+      );
+    };
+    getMessages();
+  }, []);
 
   console.log('here are the messags', Messages);
   console.log('number of messages', Messages.length);
@@ -81,15 +85,17 @@ const MessageHomepage = props => {
         {Messages
           ? Messages.map(message => (
               <>
-                <View
-                  style={{
-                    width: '100%',
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'black',
-                  }}>
-                  <Text style={styles.bold}> {message.address} </Text>
-                  <Text style={styles.italic}>{message.body.trim()} </Text>
-                </View>
+                <React.Fragment key={message._id}>
+                  <View
+                    style={{
+                      width: '100%',
+                      borderBottomWidth: 1,
+                      borderBottomColor: 'black',
+                    }}>
+                    <Text style={styles.bold}> {message.address} </Text>
+                    <Text style={styles.italic}>{message.body.trim()} </Text>
+                  </View>
+                </React.Fragment>
               </>
             ))
           : console.log('no messages')}
@@ -104,9 +110,7 @@ const MessageHomepage = props => {
             position: 'absolute',
             top: 450,
           },
-        ]}>
-        <Button title="Get Messages" color="" onPress={getMessages} />
-      </View>
+        ]}></View>
       <View
         style={[
           {
