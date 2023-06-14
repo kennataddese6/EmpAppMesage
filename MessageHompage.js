@@ -30,6 +30,8 @@ const MessageHomepage = props => {
   const filter = {
     box: '',
   };
+  const uniqueSet = new Set();
+  const duplicateItems = [];
 
   useEffect(() => {
     const getMessages = async () => {
@@ -39,7 +41,7 @@ const MessageHomepage = props => {
           console.log('Failed with this error: ' + fail);
         },
         (count, smsList) => {
-          console.log('Count: ', count);
+          // console.log('Count: ', count);
           // console.log('List: ', smsList);
           setMessages(JSON.parse(smsList));
         },
@@ -47,10 +49,20 @@ const MessageHomepage = props => {
     };
     getMessages();
   }, []);
+  useEffect(() => {
+    for (const text of Messages) {
+      if (uniqueSet.has(text.address)) {
+        duplicateItems.push(text);
+      } else {
+        uniqueSet.add(text.address);
+      }
+    }
+    console.log('this are the duplicate items', duplicateItems);
+  }, [Messages]);
 
-  console.log('here are the messags', Messages);
+  /*   console.log('here are the messags', Messages);
   console.log('number of messages', Messages.length);
-  console.log('number of messages', typeof Messages);
+  console.log('number of messages', typeof Messages); */
 
   const styles = StyleSheet.create({
     border: {
