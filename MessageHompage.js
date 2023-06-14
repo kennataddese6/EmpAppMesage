@@ -104,7 +104,11 @@ const MessageHomepage = props => {
                       borderBottomColor: 'black',
                     }}>
                     <Text style={styles.bold}> {message.address} </Text>
-                    <Text style={styles.italic}>{message.body[0].trim()} </Text>
+                    <Text style={styles.italic}>
+                      {message.body[0].trim().length > 40
+                        ? message.body[0].trim().slice(0, 40).concat('...')
+                        : message.body[0].trim()}{' '}
+                    </Text>
                   </View>
                 </React.Fragment>
               </>
