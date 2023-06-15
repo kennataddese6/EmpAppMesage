@@ -26,7 +26,8 @@ function SendMessage({route}) {
   const [response, setResponse] = useState('');
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
-
+  console.log('here are the messages', Messages.body.length);
+  const textMessages = Messages.body;
   const sendText = async () => {
     setPhoneNumber(Messages.address);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
@@ -55,26 +56,21 @@ function SendMessage({route}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{response}</Text>
       <TextInput
-        style={{
-          position: 'absolute',
-          top: '0%',
-          left: '0%',
-          width: '100%',
-          borderWidth: 1,
-          borderBottomColor: 'black',
-          borderTopColor: 'white',
-          borderLeftColor: 'white',
-          borderRightColor: 'white',
-        }}
+        style={styles.phoneNumberInput}
         placeholder={
           Messages.address ? Messages.address : 'Enter a phone number'
         }
         value={Messages.address ? Messages.address : '0991374186'}
-        onChangeText={input => setPhoneNumber(Messages.address)}
+        onChangeText={input => setPhoneNumber(input)}
       />
-
+      <ScrollView style={styles.scrollView}>
+        {textMessages.map(sms => (
+          <View style={styles.allMessages}>
+            <Text>{sms}</Text>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.messagebox}>
         <TextInput
           style={styles.input}
@@ -93,44 +89,53 @@ function SendMessage({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
   },
-  messagebox: {
+  phoneNumberInput: {
+    width: '100%',
+    borderWidth: 1,
+    borderBottomColor: 'black',
+    borderTopColor: 'white',
+    borderLeftColor: 'white',
+    borderRightColor: 'white',
+  },
+  scrollView: {
     flex: 1,
-    position: 'absolute',
-    bottom: '0%',
+    backgroundColor: 'grey',
+    marginHorizontal: 0,
+  },
+  allMessages: {
+    backgroundColor: '#e5e5ea',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 14,
+    alignSelf: 'flex-start',
+  },
+  messagebox: {
     height: '10%',
     width: '100%',
     backgroundColor: 'white',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
-    height: 65,
+    height: '100%',
     width: '80%',
     borderColor: 'gray',
     paddingHorizontal: 10,
-    marginVertical: 5,
   },
   button: {
     backgroundColor: '#2196F3',
     paddingVertical: 22,
     paddingHorizontal: 20,
     borderRadius: 1,
-    position: 'absolute',
-    right: '0%',
-    height: '100%',
-    top: '0%',
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+    flex: 1,
   },
 });
 
