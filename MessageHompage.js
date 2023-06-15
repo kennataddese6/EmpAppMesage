@@ -24,9 +24,11 @@ import {
   Image,
   Button,
 } from 'react-native';
+import SendMessage from './SendMessage';
 
 const MessageHomepage = props => {
   const [Messages, setMessages] = useState([]);
+  const [viewMessage, setViewMessage] = useState('');
   const filter = {
     box: '',
   };
@@ -47,7 +49,6 @@ const MessageHomepage = props => {
           const result = Object.values(
             AllMessages.reduce((acc, item) => {
               if (acc[item.address]) {
-                console.log('found shit');
                 acc[item.address].body.push(item.body);
               } else {
                 acc[item.address] = {...item, body: [item.body]};
@@ -55,7 +56,6 @@ const MessageHomepage = props => {
               return acc;
             }, {}),
           );
-          console.log('this is the result', result);
           setMessages(result);
         },
       );
@@ -99,13 +99,31 @@ const MessageHomepage = props => {
               <>
                 <React.Fragment key={message._id}>
                   <View
+                    onPress={() => {
+                      setViewMessage(message);
+                      props.navigation.navigate('SendMessage', {
+                        details: message,
+                      });
+                    }}
                     style={{
                       width: '100%',
                       borderBottomWidth: 1,
                       borderBottomColor: 'black',
                     }}>
-                    <Text style={styles.bold}> {message.address} </Text>
-                    <Text style={styles.italic}>
+                    <Text
+                      onPress={() => {
+                        setViewMessage(message);
+                        props.navigation.navigate('SendMessage', {
+                          details: message,
+                        });
+                      }}
+                      style={styles.bold}>
+                      {' '}
+                      {message.address}{' '}
+                    </Text>
+                    <Text
+                      onPress={() => props.navigation.navigate('SendMessage')}
+                      style={styles.italic}>
                       {message.body[0].trim().length > 30
                         ? message.body[0]
                             .trim()
@@ -120,7 +138,6 @@ const MessageHomepage = props => {
             ))
           : console.log('no messages')}
       </ScrollView>
-      <ScrollView style={{position: 'relative', top: 15}}></ScrollView>
       <View
         style={[
           {

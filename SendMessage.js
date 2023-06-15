@@ -21,10 +21,13 @@ import {
 } from 'react-native';
 
 import SmsAndroid from 'react-native-get-sms-android';
-function SendMessage() {
+function SendMessage({route}) {
   const [Message, setMessage] = useState('');
   const [response, setResponse] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  console.log('here is the recived messge', route.params.details);
+  const Messages = route.params.details;
+  console.log('address', Messages.address);
   const sendText = async () => {
     SmsAndroid.autoSend(
       phoneNumber,
@@ -54,7 +57,7 @@ function SendMessage() {
       <Text style={styles.title}>{response}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter Phone Number"
+        placeholder={Messages.address}
         value={phoneNumber}
         onChangeText={input => setPhoneNumber(input)}
       />
