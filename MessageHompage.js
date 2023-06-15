@@ -109,6 +109,7 @@ const MessageHomepage = props => {
                       width: '100%',
                       borderBottomWidth: 1,
                       borderBottomColor: 'black',
+                      marginVertical: 1,
                     }}>
                     <Text
                       onPress={() => {
