@@ -26,7 +26,7 @@ function SendMessage({route}) {
   const [Message, setMessage] = useState('');
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
-  console.log('here are the messages', Messages.body.length);
+  console.log('here are the messages', Messages);
   const textMessages = Messages.body;
   const sendText = async () => {
     setPhoneNumber(Messages.address);
@@ -102,7 +102,9 @@ function SendMessage({route}) {
           onChangeText={input => handleTextChange(input)}
           multiline
         />
-        <Icon name="ios-rocket" size={30} color="#4F8EF7" />
+        <TouchableOpacity style={styles.button} onPress={sendText}>
+          <Text style={styles.text}>Send</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -146,6 +148,15 @@ const styles = StyleSheet.create({
     width: '80%',
     borderColor: 'gray',
     paddingHorizontal: 10,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 4,
+  },
+  text: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 
