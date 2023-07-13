@@ -21,9 +21,9 @@ import {
 } from 'react-native';
 
 import SmsAndroid from 'react-native-get-sms-android';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 function SendMessage({route}) {
   const [Message, setMessage] = useState('');
-  const [response, setResponse] = useState('');
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
   console.log('here are the messages', Messages.body.length);
@@ -50,10 +50,33 @@ function SendMessage({route}) {
           [{text: 'OK', onPress: () => console.log('OK Pressed')}],
           {cancelable: false},
         );
+        setMessage('');
       },
     );
   };
+  const handleTextChange = input => {
+    // Split the input text into an array of lines
+    if (input.length % 40 === 0) {
+      const lines = input.split('\n');
 
+      // Map over the lines and insert new line characters after every 40 characters
+      const formattedLines = lines.map(line => {
+        let formattedLine = '';
+        for (let i = 0; i < line.length; i += 40) {
+          formattedLine += line.slice(i, i + 40) + '\n';
+        }
+        return formattedLine;
+      });
+
+      // Join the formatted lines back into a single string
+      const formattedText = formattedLines.join('');
+
+      // Update the value of the TextInput
+      setMessage(formattedText);
+    } else {
+      setMessage(input);
+    }
+  };
   return (
     <View style={styles.container}>
       <TextInput
@@ -76,11 +99,10 @@ function SendMessage({route}) {
           style={styles.input}
           placeholder="Enter Message"
           value={Message}
-          onChangeText={input => setMessage(input)}
+          onChangeText={input => handleTextChange(input)}
+          multiline
         />
-        <TouchableOpacity style={styles.button} onPress={sendText}>
-          <Text style={styles.buttonText}>Send</Text>
-        </TouchableOpacity>
+        <Icon name="ios-rocket" size={30} color="#4F8EF7" />
       </View>
     </View>
   );
@@ -113,29 +135,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   messagebox: {
-    height: '10%',
+    height: 'auto',
     width: '100%',
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
   },
   input: {
-    height: '100%',
+    height: 'auto',
     width: '80%',
     borderColor: 'gray',
     paddingHorizontal: 10,
-  },
-  button: {
-    backgroundColor: '#2196F3',
-    paddingVertical: 22,
-    paddingHorizontal: 20,
-    borderRadius: 1,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    flex: 1,
   },
 });
 
