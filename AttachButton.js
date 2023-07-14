@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-export default function AttachButton() {
+export default function AttachButton({information}) {
   const [image, setImage] = useState(null);
 
   const pickImage = () => {
-    console.log('here are the icons if any', MaterialIcons);
-    ImagePicker.launchImageLibrary({}, response => {
+    ImagePicker.launchImageLibrary({}, async response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -23,7 +22,27 @@ export default function AttachButton() {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setImage(response.uri);
-        console.log('Image is selceted do you want to see it', response);
+
+        try {
+          const imageUri = response.assets[0].uri;
+          const fetched = await fetch(imageUri);
+          const blob = await fetched.blob();
+          const base64String = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = reject;
+            reader.onload = () => {
+              resolve(reader.result);
+            };
+            reader.readAsDataURL(blob);
+          });
+          setImage(imageUri);
+          console.log('Base64 string:', base64String.length);
+          let message = {image:base64String}
+          information(message)
+          
+        } catch (err) {
+          console.warn('Error converting image to base64:', err);
+        }
       }
     });
   };
@@ -33,7 +52,10 @@ export default function AttachButton() {
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <MaterialIcons name="attach-file" size={24} color="black" />
       </TouchableOpacity>
-      {image && <Image source={{uri: image}} style={styles.image} />}
+      {/*
+      // This is how to display the image
+       image && <Image source={{uri: image}} style={styles.image} /> 
+       */}
     </View>
   );
 }

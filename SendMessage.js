@@ -77,6 +77,13 @@ function SendMessage({route}) {
       setMessage(input);
     }
   };
+  const handleInfo = info => {
+    if (info.image) {
+      console.log('here is the data from button', info);
+    } else {
+      console.log('nothinggggg');
+    }
+  };
   return (
     <View style={styles.container}>
       <TextInput
@@ -102,7 +109,7 @@ function SendMessage({route}) {
           onChangeText={input => handleTextChange(input)}
           multiline
         />
-        <AttachButton />
+        <AttachButton information={handleInfo} />
         <TouchableOpacity style={styles.button} onPress={sendText}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
