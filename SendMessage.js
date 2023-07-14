@@ -123,7 +123,7 @@ function SendMessage({route}) {
             {sms.trim().startsWith('data:image') ? (
               <Image
                 style={styles.image}
-                source={{uri: sms}}
+                source={{uri: sms.trim()}}
                 resizeMode="contain"
               />
             ) : (
@@ -196,6 +196,11 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     textAlign: 'center',
+  },
+  image: {
+    marginTop: 20,
+    width: 200,
+    height: 200,
   },
 });
 
