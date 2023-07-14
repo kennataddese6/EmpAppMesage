@@ -19,7 +19,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-
+import AttachButton from './AttachButton';
 import SmsAndroid from 'react-native-get-sms-android';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 function SendMessage({route}) {
@@ -102,6 +102,7 @@ function SendMessage({route}) {
           onChangeText={input => handleTextChange(input)}
           multiline
         />
+        <AttachButton />
         <TouchableOpacity style={styles.button} onPress={sendText}>
           <Text style={styles.text}>Send</Text>
         </TouchableOpacity>
