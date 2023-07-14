@@ -18,6 +18,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import AttachButton from './AttachButton';
 import SmsAndroid from 'react-native-get-sms-android';
@@ -117,9 +118,17 @@ function SendMessage({route}) {
         onChangeText={input => setPhoneNumber(input)}
       />
       <ScrollView style={styles.scrollView}>
-        {textMessages.map(sms => (
-          <View style={styles.allMessages}>
-            <Text>{sms}</Text>
+        {textMessages.map((sms, index) => (
+          <View style={styles.allMessages} key={index}>
+            {sms.trim().startsWith('data:image') ? (
+              <Image
+                style={styles.image}
+                source={{uri: sms}}
+                resizeMode="contain"
+              />
+            ) : (
+              <Text>{sms}</Text>
+            )}
           </View>
         ))}
       </ScrollView>
