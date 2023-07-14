@@ -23,6 +23,7 @@ export default function AttachButton() {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setImage(response.uri);
+        console.log('Image is selceted do you want to see it', response);
       }
     });
   };
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 5,
-    color:'green'
+    color: 'green',
   },
   image: {
     marginTop: 20,
