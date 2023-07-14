@@ -27,19 +27,22 @@ export default function AttachButton({information}) {
           const imageUri = response.assets[0].uri;
           const fetched = await fetch(imageUri);
           const blob = await fetched.blob();
-          const base64String = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onerror = reject;
-            reader.onload = () => {
-              resolve(reader.result);
-            };
-            reader.readAsDataURL(blob);
-          });
-          setImage(imageUri);
-          console.log('Base64 string:', base64String.length);
-          let message = {image:base64String}
-          information(message)
-          
+          if (blob.size <= 500) {
+            const base64String = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onerror = reject;
+              reader.onload = () => {
+                resolve(reader.result);
+              };
+              reader.readAsDataURL(blob);
+            });
+            setImage(imageUri);
+            console.log('Base64 string:', base64String.length);
+            let message = {image: base64String};
+            information(message);
+          } else {
+            console.log('file size tooooooooooooooooooooooooooooo big');
+          }
         } catch (err) {
           console.warn('Error converting image to base64:', err);
         }
