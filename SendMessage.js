@@ -80,6 +80,28 @@ function SendMessage({route}) {
   const handleInfo = info => {
     if (info.image) {
       console.log('here is the data from button', info);
+      SmsAndroid.autoSend(
+        phoneNumber,
+        info.image,
+        fail => {
+          Alert.alert(
+            'Error',
+            `Something Went Wrong. Please try again!${phoneNumber}`,
+            [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+            {cancelable: false},
+          );
+          console.log('Here is the error', fail);
+        },
+        success => {
+          Alert.alert(
+            'Success',
+            `Message sent to ${phoneNumber} Succesfully`,
+            [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+            {cancelable: false},
+          );
+          setMessage('');
+        },
+      );
     } else {
       console.log('nothinggggg');
     }
