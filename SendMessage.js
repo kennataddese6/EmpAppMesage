@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
   },
   image: {
     marginTop: 20,
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 150,
   },
 });
 
