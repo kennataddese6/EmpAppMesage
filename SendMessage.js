@@ -120,7 +120,8 @@ function SendMessage({route}) {
       <ScrollView style={styles.scrollView}>
         {textMessages.map((sms, index) => (
           <View style={styles.allMessages} key={index}>
-            {sms.trim().startsWith('data:image') ? (
+            {sms.trim().startsWith('data:image') ||
+            sms.trim().startsWith('data:application/octet-stream') ? (
               <Image
                 style={styles.image}
                 source={{uri: sms.trim()}}

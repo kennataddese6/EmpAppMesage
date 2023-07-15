@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'react-native-image-picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import ImageResizer from 'react-native-image-resizer';
 export default function AttachButton({information}) {
   const [image, setImage] = useState(null);
 
@@ -21,12 +22,11 @@ export default function AttachButton({information}) {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setImage(response.uri);
-
         try {
           const imageUri = response.assets[0].uri;
           const fetched = await fetch(imageUri);
           const blob = await fetched.blob();
+          console.log('step one ');
           if (blob.size <= 500) {
             const base64String = await new Promise((resolve, reject) => {
               const reader = new FileReader();
@@ -41,7 +41,37 @@ export default function AttachButton({information}) {
             let message = {image: base64String};
             information(message);
           } else {
-            console.log('file size tooooooooooooooooooooooooooooo big');
+            console.log('step two ');
+            // If the size is greater than 500 bytes, resize the image and then convert to Base64
+            const resizedBlob = await ImageResizer.createResizedImage(
+              imageUri,
+              10,
+              10,
+              'PNG',
+              5,
+            );
+            console.log('Step three', resizedBlob);
+            const resizedBase64String = await new Promise((resolve, reject) => {
+              fetch(resizedBlob.uri)
+                .then(response => response.blob())
+                .then(blob => {
+                  const reader = new FileReader();
+                  reader.onerror = reject;
+                  reader.onload = () => {
+                    resolve(reader.result);
+                  };
+                  reader.readAsDataURL(blob);
+                })
+                .catch(error => {
+                  reject(error);
+                });
+            });
+            console.log('step eight');
+            setImage(resizedBlob.uri);
+            console.log('step nine');
+            console.log('Resized Base64 string:', resizedBase64String.length);
+            let message = {image: resizedBase64String};
+            information(message);
           }
         } catch (err) {
           console.warn('Error converting image to base64:', err);

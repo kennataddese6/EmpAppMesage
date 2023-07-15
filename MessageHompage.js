@@ -122,7 +122,10 @@ const MessageHomepage = props => {
                       {' '}
                       {message.address}{' '}
                     </Text>
-                    {message.body[0].trim().startsWith('data:image') ? (
+                    {message.body[0].trim().startsWith('data:image') ||
+                    message.body[0]
+                      .trim()
+                      .startsWith('data:application/octet-stream') ? (
                       <Text
                         onPress={() => props.navigation.navigate('SendMessage')}
                         style={styles.italic}>
