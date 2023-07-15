@@ -32,8 +32,30 @@ const MessageHomepage = props => {
   const filter = {
     box: '',
   };
-  const uniqueSet = new Set();
-  const duplicateItems = [];
+  const getMessage = async () => {
+    GetSmsAndroid.list(
+      JSON.stringify(filter),
+      fail => {
+        console.log('Failed with this error: ' + fail);
+      },
+      (count, smsList) => {
+        // console.log('Count: ', count);
+        // console.log('List: ', smsList);
+        const AllMessages = JSON.parse(smsList);
+        const result = Object.values(
+          AllMessages.reduce((acc, item) => {
+            if (acc[item.address]) {
+              acc[item.address].body.push(item.body);
+            } else {
+              acc[item.address] = {...item, body: [item.body]};
+            }
+            return acc;
+          }, {}),
+        );
+        setMessages(result);
+      },
+    );
+  };
 
   useEffect(() => {
     const getMessages = async () => {
@@ -170,11 +192,7 @@ const MessageHomepage = props => {
             top: 500,
           },
         ]}>
-        <Button
-          title="Send Message"
-          color=""
-          onPress={() => props.navigation.navigate('SendMessage')}
-        />
+        <Button title="Refresh" color="" onPress={getMessage} />
       </View>
     </View>
   );
