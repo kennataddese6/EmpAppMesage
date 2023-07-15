@@ -122,17 +122,25 @@ const MessageHomepage = props => {
                       {' '}
                       {message.address}{' '}
                     </Text>
-                    <Text
-                      onPress={() => props.navigation.navigate('SendMessage')}
-                      style={styles.italic}>
-                      {message.body[0].trim().length > 30
-                        ? message.body[0]
-                            .trim()
-                            .replace(/[\s\n]+/g, ' ')
-                            .slice(0, 30)
-                            .concat('...')
-                        : message.body[0].trim()}{' '}
-                    </Text>
+                    {message.body[0].trim().startsWith('data:image') ? (
+                      <Text
+                        onPress={() => props.navigation.navigate('SendMessage')}
+                        style={styles.italic}>
+                        Photo
+                      </Text>
+                    ) : (
+                      <Text
+                        onPress={() => props.navigation.navigate('SendMessage')}
+                        style={styles.italic}>
+                        {message.body[0].trim().length > 30
+                          ? message.body[0]
+                              .trim()
+                              .replace(/[\s\n]+/g, ' ')
+                              .slice(0, 30)
+                              .concat('...')
+                          : message.body[0].trim()}{' '}
+                      </Text>
+                    )}
                   </View>
                 </React.Fragment>
               </>
