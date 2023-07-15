@@ -24,37 +24,12 @@ import {
   Image,
   Button,
 } from 'react-native';
-import SendMessage from './SendMessage';
-
+import GetMessage from './GetMessage';
 const MessageHomepage = props => {
   const [Messages, setMessages] = useState([]);
   const [viewMessage, setViewMessage] = useState('');
   const filter = {
     box: '',
-  };
-  const getMessage = async () => {
-    GetSmsAndroid.list(
-      JSON.stringify(filter),
-      fail => {
-        console.log('Failed with this error: ' + fail);
-      },
-      (count, smsList) => {
-        // console.log('Count: ', count);
-        // console.log('List: ', smsList);
-        const AllMessages = JSON.parse(smsList);
-        const result = Object.values(
-          AllMessages.reduce((acc, item) => {
-            if (acc[item.address]) {
-              acc[item.address].body.push(item.body);
-            } else {
-              acc[item.address] = {...item, body: [item.body]};
-            }
-            return acc;
-          }, {}),
-        );
-        setMessages(result);
-      },
-    );
   };
 
   useEffect(() => {
@@ -101,6 +76,14 @@ const MessageHomepage = props => {
       fontSize: 20,
     },
   });
+  const handleRefresh = async () => {
+    try {
+      const result = await GetMessage();
+      setMessages(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View
       style={{
@@ -192,7 +175,7 @@ const MessageHomepage = props => {
             top: 500,
           },
         ]}>
-        <Button title="Refresh" color="" onPress={getMessage} />
+        <Button title="Refresh" color="" onPress={handleRefresh} />
       </View>
     </View>
   );
