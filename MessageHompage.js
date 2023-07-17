@@ -6,11 +6,11 @@
  */
 
 import React from 'react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GetSmsAndroid from 'react-native-get-sms-android';
-import {DataTable} from 'react-native-paper';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {
   SafeAreaView,
@@ -28,6 +28,8 @@ import GetMessage from './GetMessage';
 const MessageHomepage = props => {
   const [Messages, setMessages] = useState([]);
   const [viewMessage, setViewMessage] = useState('');
+  const [onScreen, setOnScreen] = useState(true);
+
   const filter = {
     box: '',
   };
@@ -84,15 +86,27 @@ const MessageHomepage = props => {
       console.log(error);
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      console.log('SendMessageScreen focused');
+      // Do something when the SendMessageScreen is focused
+      setOnScreen(true);
+      return () => {
+        console.log('SendMessageScreen blurred');
+        // Do something when the SendMessageScreen is blurred
+        setOnScreen(false);
+      };
+    }, []),
+  );
   useEffect(() => {
-
     // Refresh message list every 30 seconds
-    const interval = setInterval(() => {
-      handleRefresh();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+    if (onScreen) {
+      const interval = setInterval(() => {
+        handleRefresh();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [onScreen]);
 
   return (
     <View
