@@ -39,7 +39,7 @@ function SendMessage({route}) {
         Alert.alert(
           'Error',
           `Something Went Wrong. Please try again!`,
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+          [{text: 'OK', onPress: () => setMessage('')}],
           {cancelable: false},
         );
         console.log('Here is the error', fail);
@@ -48,7 +48,7 @@ function SendMessage({route}) {
         Alert.alert(
           'Success',
           `Message sent to ${phoneNumber} Succesfully`,
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+          [{text: 'OK', onPress: () => setMessage('')}],
           {cancelable: false},
         );
         setMessage('');

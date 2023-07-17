@@ -84,6 +84,16 @@ const MessageHomepage = props => {
       console.log(error);
     }
   };
+  useEffect(() => {
+
+    // Refresh message list every 30 seconds
+    const interval = setInterval(() => {
+      handleRefresh();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <View
       style={{
