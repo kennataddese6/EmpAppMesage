@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -22,12 +22,12 @@ import {
 } from 'react-native';
 import AttachButton from './AttachButton';
 import SmsAndroid from 'react-native-get-sms-android';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import {useFocusEffect} from '@react-navigation/native';
 function SendMessage({route}) {
   const [Message, setMessage] = useState('');
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
-  console.log('here are the messages', Messages);
+  console.log('here are the messages', Messages.address);
   const textMessages = Messages.body;
   const sendText = async () => {
     setPhoneNumber(Messages.address);
@@ -107,6 +107,16 @@ function SendMessage({route}) {
       console.log('nothinggggg');
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      console.log('SendMessageScreen focused');
+      // Do something when the SendMessageScreen is focused
+      return () => {
+        console.log('SendMessageScreen blurred');
+        // Do something when the SendMessageScreen is blurred
+      };
+    }, []),
+  );
   return (
     <View style={styles.container}>
       <TextInput
