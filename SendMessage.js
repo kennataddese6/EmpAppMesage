@@ -26,8 +26,8 @@ function SendMessage({route}) {
   const [onScreen, setOnScreen] = useState(true);
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
+  const [textMessages, settextMessages] = useState(Messages.body);
   console.log('here are the messages', Messages.address);
-  const textMessages = Messages.body;
   const sendText = async () => {
     setPhoneNumber(Messages.address);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
@@ -109,6 +109,7 @@ function SendMessage({route}) {
   const handleRefresh = async () => {
     try {
       const result = await GetMessage(`${phoneNumber}`);
+      settextMessages(result[0].body);
     } catch (error) {
       console.log(error);
     }

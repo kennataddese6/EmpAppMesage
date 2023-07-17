@@ -1,10 +1,12 @@
 import GetSmsAndroid from 'react-native-get-sms-android';
 
-const GetMessage = (phone) => {
-  console.log('i am clicked',phone);
-  const filter = {
-    box: '',
-  };
+const GetMessage = phone => {
+  const filter = phone
+    ? {box: '', address: phone}
+    : {
+        box: '',
+      };
+  console.log('i am clicked', filter);
 
   return new Promise((resolve, reject) => {
     GetSmsAndroid.list(
