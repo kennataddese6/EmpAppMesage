@@ -1,7 +1,7 @@
 import GetSmsAndroid from 'react-native-get-sms-android';
 
-const GetMessage = () => {
-  console.log('i am clicked');
+const GetMessage = (phone) => {
+  console.log('i am clicked',phone);
   const filter = {
     box: '',
   };

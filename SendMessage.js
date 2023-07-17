@@ -5,17 +5,13 @@
  * @format
  */
 
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
-  useColorScheme,
   View,
-  Button,
   Alert,
   TouchableOpacity,
   Image,
@@ -23,8 +19,11 @@ import {
 import AttachButton from './AttachButton';
 import SmsAndroid from 'react-native-get-sms-android';
 import {useFocusEffect} from '@react-navigation/native';
+import GetMessage from './GetMessage';
+
 function SendMessage({route}) {
   const [Message, setMessage] = useState('');
+  const [onScreen, setOnScreen] = useState(true);
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
   console.log('here are the messages', Messages.address);
@@ -107,16 +106,32 @@ function SendMessage({route}) {
       console.log('nothinggggg');
     }
   };
+  const handleRefresh = async () => {
+    try {
+      const result = await GetMessage(`${phoneNumber}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useFocusEffect(
     useCallback(() => {
-      console.log('SendMessageScreen focused');
       // Do something when the SendMessageScreen is focused
+      setOnScreen(true);
       return () => {
-        console.log('SendMessageScreen blurred');
         // Do something when the SendMessageScreen is blurred
+        setOnScreen(false);
       };
     }, []),
   );
+  useEffect(() => {
+    // Refresh message list every 30 seconds
+    if (onScreen) {
+      const interval = setInterval(() => {
+        handleRefresh();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [onScreen]);
   return (
     <View style={styles.container}>
       <TextInput
