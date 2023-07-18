@@ -20,6 +20,7 @@ import AttachButton from './AttachButton';
 import SmsAndroid from 'react-native-get-sms-android';
 import {useFocusEffect} from '@react-navigation/native';
 import GetMessage from './GetMessage';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function SendMessage({route}) {
   const [Message, setMessage] = useState('');
@@ -28,6 +29,7 @@ function SendMessage({route}) {
   const [phoneNumber, setPhoneNumber] = useState(route.params.details.phoneNum);
   const [textMessages, settextMessages] = useState('');
   const sendText = async () => {
+    console.log('hello there what is going on there');
     setPhoneNumber(route.params.details.phoneNum);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
     SmsAndroid.autoSend(
@@ -173,8 +175,10 @@ function SendMessage({route}) {
           multiline
         />
         <AttachButton information={handleInfo} />
-        <TouchableOpacity style={styles.button} onPress={sendText}>
-          <Text style={styles.text}>Send</Text>
+        <TouchableOpacity onPress={sendText}>
+          <View style={styles.sendMessages}>
+            <MaterialIcons name="send" size={30} color="#fff" />
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -257,6 +261,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 100,
     height: 150,
+  },
+  sendMessages: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    borderRadius: 28,
+    width: 40,
+    height: 40,
+    margin: 7,
   },
 });
 
