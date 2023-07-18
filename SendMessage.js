@@ -25,9 +25,8 @@ function SendMessage({route}) {
   const [Message, setMessage] = useState('');
   const [onScreen, setOnScreen] = useState(true);
   const Messages = route.params ? route.params.details : '';
-  const [phoneNumber, setPhoneNumber] = useState(Messages.address);
+  const [phoneNumber, setPhoneNumber] = useState(Messages.phoneNum);
   const [textMessages, settextMessages] = useState(Messages.messages);
-  console.log('here are the messages', Messages.messages);
   const sendText = async () => {
     setPhoneNumber(Messages.address);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
@@ -109,7 +108,7 @@ function SendMessage({route}) {
   const handleRefresh = async () => {
     try {
       const result = await GetMessage(`${phoneNumber}`);
-      settextMessages(result[0].body);
+      settextMessages(result.messages[0].body);
     } catch (error) {
       console.log(error);
     }
@@ -135,33 +134,32 @@ function SendMessage({route}) {
   }, [onScreen]);
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.phoneNumberInput}
-        placeholder={
-          Messages.address ? Messages.address : 'Enter a phone number'
-        }
-        value={Messages.address ? Messages.address : '0991374186'}
-        onChangeText={input => setPhoneNumber(input)}
-      />
+      <Text style={styles.phoneDisplays}>
+        {phoneNumber ? phoneNumber : '0991374186'}
+      </Text>
       <ScrollView style={styles.scrollView}>
-        {textMessages.map((sms, index) => (
-          <View
-            style={
-              sms.type === 'sent' ? styles.sentMessages : styles.inboxMessages
-            }
-            key={index}>
-            {sms.body.trim().startsWith('data:image') ||
-            sms.body.trim().startsWith('data:application/octet-stream') ? (
-              <Image
-                style={styles.image}
-                source={{uri: sms.body.trim()}}
-                resizeMode="contain"
-              />
-            ) : (
-              <Text>{sms.body}</Text>
-            )}
-          </View>
-        ))}
+        {textMessages
+          ? textMessages.map((sms, index) => (
+              <View
+                style={
+                  sms.type === 'sent'
+                    ? styles.sentMessages
+                    : styles.inboxMessages
+                }
+                key={index}>
+                {sms.body.trim().startsWith('data:image') ||
+                sms.body.trim().startsWith('data:application/octet-stream') ? (
+                  <Image
+                    style={styles.image}
+                    source={{uri: sms.body.trim()}}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Text>{sms.body}</Text>
+                )}
+              </View>
+            ))
+          : console.log('something went wrong')}
       </ScrollView>
       <View style={styles.messagebox}>
         <TextInput
@@ -183,7 +181,7 @@ function SendMessage({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'silver',
   },
   phoneNumberInput: {
     width: '100%',
@@ -216,6 +214,14 @@ const styles = StyleSheet.create({
   },
   inboxMessages: {
     backgroundColor: '#EAEAEA',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 14,
+    alignSelf: 'flex-start',
+  },
+  phoneDisplays: {
+    backgroundColor: '#d1f5ff',
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,
