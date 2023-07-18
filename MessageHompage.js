@@ -8,14 +8,8 @@
 import React from 'react';
 import {useState, useEffect, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-} from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {ScrollView, StyleSheet, Text, View, Button} from 'react-native';
 import GetMessage from './GetMessage';
 const MessageHomepage = props => {
   const [Messages, setMessages] = useState([]);
@@ -153,14 +147,18 @@ const MessageHomepage = props => {
       <View
         style={[
           {
-            width: '90%',
-            margin: 10,
-            backgroundColor: 'red',
-            position: 'absolute',
-            top: 500,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#2196F3',
+            borderRadius: 30,
+            width: 60,
+            height: 60,
+            alignSelf: 'flex-start',
+            margin: 20,
           },
         ]}>
-        <Button title="Refresh" color="" onPress={handleRefresh} />
+        <MaterialIcons name="mode-edit" size={30} color="#fff" />
       </View>
     </View>
   );
