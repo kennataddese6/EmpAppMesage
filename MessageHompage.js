@@ -7,21 +7,13 @@
 
 import React from 'react';
 import {useState, useEffect, useCallback} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import GetSmsAndroid from 'react-native-get-sms-android';
 import {useFocusEffect} from '@react-navigation/native';
 
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
-  useColorScheme,
   View,
-  Image,
   Button,
 } from 'react-native';
 import GetMessage from './GetMessage';
@@ -130,15 +122,9 @@ const MessageHomepage = props => {
                     message.messages[0].body
                       .trim()
                       .startsWith('data:application/octet-stream') ? (
-                      <Text
-                        onPress={() => props.navigation.navigate('SendMessage')}
-                        style={styles.italic}>
-                        Photo
-                      </Text>
+                      <Text style={styles.italic}>Photo</Text>
                     ) : (
-                      <Text
-                        onPress={() => props.navigation.navigate('SendMessage')}
-                        style={styles.italic}>
+                      <Text style={styles.italic}>
                         {message.messages[0].body.trim().length > 30
                           ? message.messages[0].body
                               .trim()
