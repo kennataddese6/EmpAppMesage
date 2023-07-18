@@ -18,10 +18,13 @@ const GetMessage = phone => {
         const allMessages = JSON.parse(smsList);
         const result = Object.values(
           allMessages.reduce((acc, item) => {
-            if (acc[item.address]) {
-              acc[item.address].body.push(item.body);
+            const phoneNum = item.address;
+            const type = item.type === 1 ? 'received' : 'sent'; // Check if the message is received or sent
+            const message = {body: item.body, type};
+            if (acc[phoneNum]) {
+              acc[phoneNum].messages.push(message);
             } else {
-              acc[item.address] = {...item, body: [item.body]};
+              acc[phoneNum] = {phoneNum, messages: [message]};
             }
             return acc;
           }, {}),

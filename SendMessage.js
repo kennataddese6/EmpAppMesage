@@ -26,8 +26,8 @@ function SendMessage({route}) {
   const [onScreen, setOnScreen] = useState(true);
   const Messages = route.params ? route.params.details : '';
   const [phoneNumber, setPhoneNumber] = useState(Messages.address);
-  const [textMessages, settextMessages] = useState(Messages.body);
-  console.log('here are the messages', Messages.address);
+  const [textMessages, settextMessages] = useState(Messages.messages);
+  console.log('here are the messages', Messages.messages);
   const sendText = async () => {
     setPhoneNumber(Messages.address);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
@@ -145,16 +145,20 @@ function SendMessage({route}) {
       />
       <ScrollView style={styles.scrollView}>
         {textMessages.map((sms, index) => (
-          <View style={styles.allMessages} key={index}>
-            {sms.trim().startsWith('data:image') ||
-            sms.trim().startsWith('data:application/octet-stream') ? (
+          <View
+            style={
+              sms.type === 'sent' ? styles.sentMessages : styles.inboxMessages
+            }
+            key={index}>
+            {sms.body.trim().startsWith('data:image') ||
+            sms.body.trim().startsWith('data:application/octet-stream') ? (
               <Image
                 style={styles.image}
-                source={{uri: sms.trim()}}
+                source={{uri: sms.body.trim()}}
                 resizeMode="contain"
               />
             ) : (
-              <Text>{sms}</Text>
+              <Text>{sms.body}</Text>
             )}
           </View>
         ))}
@@ -196,6 +200,22 @@ const styles = StyleSheet.create({
   },
   allMessages: {
     backgroundColor: '#e5e5ea',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 14,
+    alignSelf: 'flex-start',
+  },
+  sentMessages: {
+    backgroundColor: '#DCF8C5',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 14,
+    alignSelf: 'flex-end',
+  },
+  inboxMessages: {
+    backgroundColor: '#EAEAEA',
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,

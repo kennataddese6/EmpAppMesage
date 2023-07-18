@@ -35,31 +35,7 @@ const MessageHomepage = props => {
   };
 
   useEffect(() => {
-    const getMessages = async () => {
-      GetSmsAndroid.list(
-        JSON.stringify(filter),
-        fail => {
-          console.log('Failed with this error: ' + fail);
-        },
-        (count, smsList) => {
-          // console.log('Count: ', count);
-          // console.log('List: ', smsList);
-          const AllMessages = JSON.parse(smsList);
-          const result = Object.values(
-            AllMessages.reduce((acc, item) => {
-              if (acc[item.address]) {
-                acc[item.address].body.push(item.body);
-              } else {
-                acc[item.address] = {...item, body: [item.body]};
-              }
-              return acc;
-            }, {}),
-          );
-          setMessages(result);
-        },
-      );
-    };
-    getMessages();
+    handleRefresh();
   }, []);
 
   const styles = StyleSheet.create({
@@ -81,6 +57,7 @@ const MessageHomepage = props => {
   const handleRefresh = async () => {
     try {
       const result = await GetMessage();
+      console.log('here is the another result', result);
       setMessages(result);
     } catch (error) {
       console.log(error);
@@ -149,10 +126,10 @@ const MessageHomepage = props => {
                       }}
                       style={styles.bold}>
                       {' '}
-                      {message.address}{' '}
+                      {message.phoneNum}{' '}
                     </Text>
-                    {message.body[0].trim().startsWith('data:image') ||
-                    message.body[0]
+                    {message.messages[0].body.trim().startsWith('data:image') ||
+                    message.messages[0].body
                       .trim()
                       .startsWith('data:application/octet-stream') ? (
                       <Text
@@ -164,13 +141,13 @@ const MessageHomepage = props => {
                       <Text
                         onPress={() => props.navigation.navigate('SendMessage')}
                         style={styles.italic}>
-                        {message.body[0].trim().length > 30
-                          ? message.body[0]
+                        {message.messages[0].body.trim().length > 30
+                          ? message.messages[0].body
                               .trim()
                               .replace(/[\s\n]+/g, ' ')
                               .slice(0, 30)
                               .concat('...')
-                          : message.body[0].trim()}{' '}
+                          : message.messages[0].body.trim()}{' '}
                       </Text>
                     )}
                   </View>
