@@ -24,11 +24,11 @@ import GetMessage from './GetMessage';
 function SendMessage({route}) {
   const [Message, setMessage] = useState('');
   const [onScreen, setOnScreen] = useState(true);
-  const Messages = route.params ? route.params.details : '';
-  const [phoneNumber, setPhoneNumber] = useState(Messages.phoneNum);
-  const [textMessages, settextMessages] = useState(Messages.messages);
+
+  const [phoneNumber, setPhoneNumber] = useState(route.params.details.phoneNum);
+  const [textMessages, settextMessages] = useState('');
   const sendText = async () => {
-    setPhoneNumber(Messages.address);
+    setPhoneNumber(route.params.details.phoneNum);
     console.log(phoneNumber, Message, 'and', SmsAndroid);
     SmsAndroid.autoSend(
       phoneNumber,
@@ -108,7 +108,7 @@ function SendMessage({route}) {
   const handleRefresh = async () => {
     try {
       const result = await GetMessage(`${phoneNumber}`);
-      settextMessages(result.messages[0].body);
+      settextMessages(result[0].messages);
     } catch (error) {
       console.log(error);
     }
@@ -132,6 +132,9 @@ function SendMessage({route}) {
       return () => clearInterval(interval);
     }
   }, [onScreen]);
+  useEffect(() => {
+    handleRefresh();
+  }, []);
   return (
     <View style={styles.container}>
       <Text style={styles.phoneDisplays}>
@@ -159,7 +162,7 @@ function SendMessage({route}) {
                 )}
               </View>
             ))
-          : console.log('something went wrong')}
+          : console.log('something went wrong with', textMessages)}
       </ScrollView>
       <View style={styles.messagebox}>
         <TextInput

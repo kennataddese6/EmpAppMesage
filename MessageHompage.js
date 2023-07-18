@@ -57,7 +57,7 @@ const MessageHomepage = props => {
   const handleRefresh = async () => {
     try {
       const result = await GetMessage();
-      console.log('here is the another result', result);
+      console.log('here is the another result', result.length);
       setMessages(result);
     } catch (error) {
       console.log(error);
@@ -65,11 +65,9 @@ const MessageHomepage = props => {
   };
   useFocusEffect(
     useCallback(() => {
-      console.log('SendMessageScreen focused');
       // Do something when the SendMessageScreen is focused
       setOnScreen(true);
       return () => {
-        console.log('SendMessageScreen blurred');
         // Do something when the SendMessageScreen is blurred
         setOnScreen(false);
       };
@@ -108,7 +106,7 @@ const MessageHomepage = props => {
                     onPress={() => {
                       setViewMessage(message);
                       props.navigation.navigate('SendMessage', {
-                        details: message,
+                        details: message.phoneNum,
                       });
                     }}
                     style={{
