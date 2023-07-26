@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
 import {
-  Button,
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { AudioRecorder, AudioUtils } from 'react-native-audio'
 export default function AttachButton({information}) {
 
 
