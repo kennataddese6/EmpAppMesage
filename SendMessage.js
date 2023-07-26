@@ -17,6 +17,7 @@ import {
   Image,
 } from 'react-native';
 import AttachButton from './AttachButton';
+import RecordAudio from './RecordAudio';
 import SmsAndroid from 'react-native-get-sms-android';
 import {useFocusEffect} from '@react-navigation/native';
 import GetMessage from './GetMessage';
@@ -174,10 +175,11 @@ function SendMessage({route}) {
           onChangeText={input => handleTextChange(input)}
           multiline
         />
+        <RecordAudio />
         <AttachButton information={handleInfo} />
         <TouchableOpacity onPress={sendText}>
           <View style={styles.sendMessages}>
-            <MaterialIcons name="send" size={30} color="#fff" />
+            <MaterialIcons name="send" size={20} color="#fff" />
           </View>
         </TouchableOpacity>
       </View>
@@ -268,9 +270,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2196F3',
     borderRadius: 28,
-    width: 40,
-    height: 40,
-    margin: 7,
+    width: 30,
+    height: 30,
+    margin: 4,
   },
 });
 
